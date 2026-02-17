@@ -43,12 +43,12 @@ A desktop application built using Python and Kivy that:
 - Custom security algorithms
 - NIST-based policy evaluation logic
 
-## 📦 How to Run
+## How to Run
 
 1. Install dependencies:
     pip install kivy
 2. Run the application:
    python main.py
    
-## 📌 Author
+## Author
 Yashita Rathi
