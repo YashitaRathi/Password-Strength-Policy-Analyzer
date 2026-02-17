@@ -1,0 +1,755 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+#:import Window kivy.core.window.Window
+
+
+
+# ======================
+# GLOBAL THEME CONSTANTS
+# ======================
+
+#:set PRIMARY_COLOR (0.415, 0.352, 0.803, 1)
+#:set SECONDARY_COLOR (0.15, 0.15, 0.15, 1)
+#:set BACKGROUND_COLOR (0.96, 0.97, 0.98, 1)
+#:set TEXT_COLOR (0, 0, 0, 1)
+#:set SUBTEXT_COLOR (0.4, 0.4, 0.4, 1)
+
+#:set CARD_RADIUS [20]
+#:set BUTTON_HEIGHT dp(50)
+#:set INPUT_HEIGHT dp(50)
+#:set CARD_MAX_WIDTH dp(900)
+
+ScreenManager:
+    WelcomePage:
+    PasswordAnalyzer:
+    OrganizationPolicyChecker:
+
+<PrimaryButton@Button>:
+    background_normal: ""
+    background_color: 0,0,0,0
+    size_hint_y: None
+    height: BUTTON_HEIGHT
+    font_name: "assets/Montserrat-SemiBold.ttf"
+    font_size: "16sp"
+
+    canvas.before:
+        Color:
+            rgba: PRIMARY_COLOR 
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: CARD_RADIUS
+
+<SecondaryButton@Button>:
+    background_normal:""
+    background_color: 0,0,0,0
+    size_hint_y: None
+    height: BUTTON_HEIGHT
+    font_name: "assets/Montserrat-SemiBold.ttf"
+    font_size: "16sp"
+                
+    canvas.before:
+        Color: 
+            rgba: SECONDARY_COLOR
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: CARD_RADIUS
+
+<TitleLabel@Label>:
+    font_name: "assets/Montserrat-Bold.ttf"
+    font_size: "28sp"
+    color: 0,0,00,1
+    size_hint_y: None
+    height: self.texture_size[1] + 10
+
+<UserText@TextInput>:
+    hint_text_color: 0.5, 0.5, 0.5, 1
+    size_hint_y: None
+    height: INPUT_HEIGHT
+    multiline: False
+    foreground_color: TEXT_COLOR
+    background_normal: ""
+    background_active: ""
+    background_color: 0.93, 0.93, 0.95, 1
+    padding: 10
+
+<SubtitleLabel@Label>:
+    font_size: "16sp"
+    font_name: "assets/Montserrat-Medium.ttf"
+    color: SECONDARY_COLOR
+    size_hint_y: None
+    height: self.texture_size[1] + 10
+    text_size: self.width, None
+    halign: "center"
+    valign: "middle"
+
+<FooterLabel@Label>:
+    font_size: "14sp"
+    font_name: "assets/Montserrat-Regular.ttf"
+    size_hint_y: None
+    height: self.texture_size[1] + 10
+    color: SECONDARY_COLOR
+    halign: "center"
+
+<CardLayout@BoxLayout>:
+    orientation: "vertical"
+    padding: dp(25)
+    spacing: dp(20)
+    size_hint_y: None
+    height: self.minimum_height
+    size_hint_x: None
+    width: min(Window.width * 0.9, CARD_MAX_WIDTH)
+    pos_hint: {"center_x": 0.5}
+
+    canvas.before:
+        Color:
+            rgba: 0,0,0,0.12
+        RoundedRectangle:
+            pos: self.x, self.y - dp(6)
+            size: self.width + dp(6), self.height + dp(6)
+            radius: CARD_RADIUS
+
+        Color:
+            rgba: 1,1,1,1
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: CARD_RADIUS
+
+<WelcomePage>:
+    name: "Welcome"
+    canvas.before:
+        Color: 
+            rgba: BACKGROUND_COLOR
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(40)
+
+        Widget:
+        CardLayout:
+            TitleLabel:
+                text: "Password Strength Checker"
+            SubtitleLabel:
+                text: "Check your password strength and analyze your organization's policy."
+            Widget:
+                size_hint_y: None
+                height: dp(15)
+            PrimaryButton:
+                size_hint_x: None
+                width: min(Window.width * 0.5, dp(300))
+                pos_hint: {"center_x": 0.5}
+                text: "Check My Password"
+                on_release: app.input_details()
+            SecondaryButton:
+                size_hint_x: None
+                width: min(Window.width * 0.5, dp(300))
+                pos_hint: {"center_x": 0.5}
+                text: "Policy Analyzer"
+                on_release: app.root.current = "Policy Analyzer"
+            Widget:
+                size_hint_y: 1
+            FooterLabel:
+                text: "Made By YashitaRathi © 2025"
+          
+<PasswordAnalyzer>:
+    name: "Password Analyzer"
+
+    BoxLayout:
+        orientation: "vertical"
+        size_hint: 1, 1
+        pos_hint: {"center_x": 0.5}
+        padding: 40
+
+        canvas.before:
+            Color: 
+                rgba: BACKGROUND_COLOR
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        SecondaryButton:
+            size_hint_x: None
+            width: min(Window.width * 0.5, dp(300))
+            pos_hint: {"center_x": 0.5}
+            text: "Back"
+            on_release: app.root.current = "Welcome"
+
+        Widget:
+
+        CardLayout:
+            TitleLabel:
+                text: "Enter Password to Analyze"
+
+            SubtitleLabel:
+                text: "This tool evaluates your password using modern security standards, including NIST rules. Get instant feedback and suggestions to improve your password strength."
+                halign: 'left'
+            
+            BoxLayout:
+                orientation: "vertical"
+                spacing: 30
+                size_hint_y: None
+                height: self.minimum_height
+                size_hint_x: None
+                width: min(dp(450), Window.width * 0.7)
+
+                UserText:
+                    id: user_password
+                    hint_text: "Enter your password here"
+                    size_hint_x: None
+                    width: min(dp(450), Window.width * 0.7)
+
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(20)
+                    Label:
+                        text: "This information is never saved and is only used to check whether your password contains easily guessable personal details."
+                        font_size: "14sp"
+                        color: 0,0,0,0.8
+                        text_size: self.width * 0.9, None
+                        halign: 'left'
+                        valign: 'middle'
+                        font_name: "assets/Montserrat-Medium.ttf"
+                    CheckBox:
+                        id: requirement
+                        size_hint_x: None
+                        width: dp(50)
+                        color: TEXT_COLOR            
+
+            PrimaryButton:
+                size_hint_x: None
+                width: min(Window.width * 0.5, dp(300))
+                pos_hint: {"center_x": 0.5}
+                text: "Analyze"
+                on_release: app.analyze_password(user_password.text)
+            
+            Widget:
+
+        Widget:
+
+        FooterLabel:
+            text: "Made By YashitaRathi © 2025"
+
+<OrganizationPolicyChecker>:
+    name: "Policy Analyzer"
+    BoxLayout:
+        orientation: "vertical"
+        size_hint: 1, 1
+        pos_hint: {"center_x": 0.5}
+        padding: 40
+        spacing: 20
+
+        canvas.before:
+            Color: 
+                rgba: BACKGROUND_COLOR
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        SecondaryButton:
+            size_hint_x: None
+            width: min(Window.width * 0.5, dp(300))
+            pos_hint: {"center_x": 0.5}
+            text: "Back"
+            on_release: app.root.current = "Welcome"
+        
+
+        CardLayout:
+            TitleLabel:
+                text: "Organization Policy Checker"
+            SubtitleLabel:
+                text: "Your organization deserves a policy that truly protects. Use our tool for a trusted, friendly comparison to the NIST standard, ensuring you move beyond old habits (like forced expirations) toward mandating Multi-Factor Authentication and cutting-edge digital defense."
+            SubtitleLabel:
+                text: "Enter your organization's current password rules below to compare them against modern NIST security standards."
+            ScrollView:
+                size_hint_y: 1
+                BoxLayout:
+                    orientation: "vertical"
+                    padding: 25
+                    spacing: 30
+                    size_hint_y: None
+                    height: self.minimum_height
+                    pos_hint: {"center_x": 0.5}
+                    background_color: 0,0,0,0
+                    background_normal:""
+
+
+                    canvas.before:
+                        Color: 
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            size: self.size
+                            pos: self.pos
+                            radius: [15]
+                    Label:
+                        text: "Password minimum length?"
+                        color: TEXT_COLOR
+                        text_size: self.size
+                        halign: 'left'
+                        valign: 'middle'
+
+                    UserText:
+                        id: min_length
+                        hint_text: "e.g. 8"
+                        input_filter: "int"
+
+                    Label:
+                        text: "Password maximum length?"
+                        color: TEXT_COLOR
+                        text_size: self.size
+                        halign: 'left'
+                        valign: 'middle'
+
+                    UserText:
+                        id: max_length
+                        hint_text: "e.g. 15"
+                        input_filter: "int"
+                    
+                    Label:
+                        text: "Max Failed Login Attempts?"
+                        color: TEXT_COLOR
+                        text_size: self.size
+                        halign: 'left'
+                        valign: 'middle'
+
+                    UserText:
+                        id: login
+                        hint_text: "e.g. 5"
+                        input_filter: "int"
+
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(20)
+                        Label:
+                            text: "Require Special Characters/Numbers?"
+                            color: TEXT_COLOR
+                            text_size: self.size
+                            halign: 'left'
+                            valign: 'middle'
+                        CheckBox:
+                            id: requirement
+                            size_hint_x: None
+                            width: dp(50)
+                            color: TEXT_COLOR
+
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(20)
+                        Label:
+                            text: "Force Password Expiration?"
+                            color: TEXT_COLOR
+                            text_size: self.size
+                            halign: 'left'
+                            valign: 'middle'
+                        CheckBox:
+                            id: expiration
+                            size_hint_x: None
+                            width: dp(50)
+                            color: TEXT_COLOR
+
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(20)
+                        Label:
+                            text: "Use Common Password Blocklist?"
+                            color: TEXT_COLOR
+                            text_size: self.size
+                            halign: 'left'
+                            valign: 'middle'
+                        CheckBox:
+                            id: blocklist
+                            size_hint_x: None
+                            width: dp(50)
+                            color: TEXT_COLOR
+
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(20)
+                        Label:
+                            text: "Use Security Questions?"
+                            color: TEXT_COLOR
+                            text_size: self.size
+                            halign: 'left'
+                            valign: 'middle'
+                        CheckBox:
+                            id: security_question
+                            size_hint_x: None
+                            width: dp(50)
+                            color: TEXT_COLOR
+
+                
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(20)
+                        Label:
+                            text: "Allow Long Passphrases?"
+                            color: TEXT_COLOR
+                            text_size: self.size
+                            halign: 'left'
+                            valign: 'middle'
+                        CheckBox:
+                            id: passphrase
+                            size_hint_x: None
+                            width: dp(50)
+                            color: TEXT_COLOR
+            
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(20)
+                        Label:
+                            text: "Mandate Multi-Factor Auth (MFA)?"
+                            color: TEXT_COLOR
+                            text_size: self.size
+                            halign: 'left'
+                            valign: 'middle'
+                        CheckBox:
+                            id: mfa
+                            size_hint_x: None
+                            width: dp(50)
+                            color: TEXT_COLOR
+
+            PrimaryButton:
+                size_hint_x: None
+                width: min(Window.width * 0.5, dp(300))
+                pos_hint: {"center_x": 0.5}
+                text: "Analyze Policy"
+                on_release: app.analyze_policy()
+            
+
+        FooterLabel:
+            text: "Made By YashitaRathi © 2025"
+
+<UserDetails@Popup>:
+    title: ""
+    title_size: 0
+    separator_height: 0
+    separator_color: 0,0,0,0
+    size_hint: 0.9, 0.85
+    auto_dismiss: False
+    background: ""
+    background_color: 1,1,1,0
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(25)
+        spacing: dp(15)
+
+        canvas.before:
+            Color:
+                rgba: 1,1,1,1
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: CARD_RADIUS
+
+        Label:
+            text: "User Details"
+            font_name: "assets/Montserrat-SemiBold.ttf"
+            font_size: "20sp"
+            color: PRIMARY_COLOR
+            size_hint_y: None
+            height: self.texture_size[1] + 10
+            markup: True
+            halign: "center"
+            text_size: self.width, None    
+        
+        Label:
+            text: "This information is never saved and is only used to check whether your password contains easily guessable personal details."
+            font_size: "13sp"
+            color: SUBTEXT_COLOR
+            halign: "center"
+            text_size: self.width * 0.9, None
+
+        ScrollView:
+            size_hint_y: 1
+
+            BoxLayout:
+                orientation: "vertical"
+                padding: 25
+                spacing: 30
+                size_hint_y: None
+                height: self.minimum_height
+                pos_hint: {"center_x": 0.5}
+                background_color: 0,0,0,0
+                background_normal:""
+
+                canvas.before:
+                    Color: 
+                        rgba: 1, 1, 1, 1
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [15]
+                Label:
+                    text: "Name/ Nickname: [color=#FF0000]*[/color]"
+                    color: TEXT_COLOR
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+                    markup: True
+
+                UserText:
+                    hint_text: "e.g. Eric"
+
+                Label:
+                    text: "Birth Year: [color=#FF0000]*[/color]"
+                    color: TEXT_COLOR
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+                    markup: True
+
+                UserText:
+                    hint_text: "e.g. 1999"
+                    input_filter: "int"
+                    max_text_length: 4
+                
+                Label:
+                    text: "Favourite color:"
+                    color: TEXT_COLOR
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+
+                UserText:
+                    hint_text: "e.g. Yellow"
+                
+                Label:
+                    text: "Pet's name: "
+                    color: TEXT_COLOR
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+
+                UserText:
+                    hint_text: "e.g. Angela"
+
+        PrimaryButton:
+            size_hint_x: None
+            width: min(Window.width * 0.5, dp(300))
+            pos_hint: {"center_x": 0.5}
+            text: "Done"
+            on_release: 
+                root.dismiss()
+                app.root.current = "Password Analyzer"
+
+<AnalysisResult@Popup>:
+    title: ""
+    title_size: 0
+    separator_height: 0
+    separator_color: 0,0,0,0
+    size_hint: 0.9, 0.85
+    auto_dismiss: False
+    background: ""
+    background_color: 1,1,1,0
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: 25
+        spacing: 15
+
+        canvas.before:
+            Color:
+                rgba: 1,1,1,1
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: CARD_RADIUS
+        
+            
+        Label:
+            text: "Analysis Result"
+            font_name: "assets/Montserrat-SemiBold.ttf"
+            font_size: "20sp"
+            color: PRIMARY_COLOR
+            size_hint_y: None
+            height: self.texture_size[1] + 10
+            markup: True
+            halign: "center"
+            text_size: self.width, None
+
+        Label:
+            id: strength_label
+            text: ""
+            font_name: "assets/Montserrat-Medium.ttf"
+            font_size: "16sp"
+            color: TEXT_COLOR
+            size_hint_y: None
+            height: self.texture_size[1] + 10
+            markup: True
+            text_size: self.width, None
+            halign: "center"
+
+        Label:
+            id: points_label
+            text: ""
+            font_name: "assets/Montserrat-Medium.ttf"
+            font_size: "16sp"
+            color: TEXT_COLOR
+            size_hint_y: None
+            height: self.texture_size[1] + 10
+            markup: True
+            halign: "center"
+            text_size: self.width, None
+        
+        ScrollView:
+            size_hint_y: 1
+
+            BoxLayout:
+                id: content_box
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 15
+                padding: 20
+
+                Label:
+                    id: issues_label
+                    text: ""
+                    font_name: "assets/Montserrat-Medium.ttf"
+                    font_size: "16sp"
+                    color: TEXT_COLOR
+                    size_hint_y: None
+                    height: self.texture_size[1] + 10
+                    markup: True
+                    halign: "left"
+                    text_size: self.width, None
+
+                Label:
+                    id: suggestions_label
+                    text: ""
+                    font_name: "assets/Montserrat-Medium.ttf"
+                    font_size: "16sp"
+                    color: TEXT_COLOR
+                    size_hint_y: None
+                    height: self.texture_size[1] + 10
+                    markup: True
+                    halign: "left"
+                    text_size: self.width, None
+
+        PrimaryButton:
+            size_hint_x: None
+            width: min(Window.width * 0.5, dp(300))
+            pos_hint: {"center_x": 0.5}
+            text: "Close"
+            on_release: root.dismiss()
+
+<PoliyPasswordPopup@Popup>:
+    title: ""
+    title_size: 0
+    separator_height: 0
+    separator_color: 0,0,0,0
+    size_hint: 0.9, 0.85
+    auto_dismiss: False
+    background: ""
+    background_color: 1,1,1,0
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: 25
+        spacing: 15
+
+        canvas.before:
+            Color:
+                rgba: 1,1,1,1
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: CARD_RADIUS
+        
+        Label:
+            text: "Analysis of Organization Password Policy"
+            font_name: "assets/Montserrat-SemiBold.ttf"
+            font_size: "20sp"
+            color: PRIMARY_COLOR
+            size_hint_y: None
+            height: self.texture_size[1] + 10
+            markup: True
+            halign: "center"
+            text_size: self.width, None
+
+        Label:
+            id: rating_label
+            text: ""
+            font_name: "assets/Montserrat-Medium.ttf"
+            font_size: "16sp"
+            color: TEXT_COLOR
+            size_hint_y: None
+            height: self.texture_size[1] + 10
+            markup: True
+            text_size: self.width, None
+            halign: "center"
+
+        Label:
+            id: score_label
+            text: ""
+            font_name: "assets/Montserrat-Medium.ttf"
+            font_size: "16sp"
+            color: TEXT_COLOR
+            size_hint_y: None
+            height: self.texture_size[1] + 10
+            markup: True
+            halign: "center"
+            text_size: self.width, None
+        
+        ScrollView:
+            size_hint_y: 1
+            do_scroll_x: False
+
+            BoxLayout:
+                id: content_box
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 15
+                padding: 0
+                
+                Label:
+                    id: issues_label
+                    text: ""
+                    font_name: "assets/Montserrat-Medium.ttf"
+                    font_size: "16sp"
+                    color: TEXT_COLOR
+                    size_hint_y: None
+                    height: self.texture_size[1] + 10
+                    markup: True
+                    halign: "left"
+                    text_size: self.width, None
+
+                Label:
+                    id: suggestions_label
+                    text: ""
+                    font_name: "assets/Montserrat-Medium.ttf"
+                    font_size: "16sp"
+                    color: TEXT_COLOR
+                    size_hint_y: None
+                    height: self.texture_size[1] + 10
+                    markup: True
+                    halign: "left"
+                    text_size: self.width, None
+                
+                Label:
+                    id: details_label
+                    text: ""
+                    font_name: "assets/Montserrat-Medium.ttf"
+                    font_size: "16sp"
+                    color: TEXT_COLOR
+                    size_hint_y: None
+                    height: self.texture_size[1] + 10
+                    markup: True
+                    halign: "left"
+                    text_size: self.width, None
+
+        PrimaryButton:
+            size_hint_x: None
+            width: min(Window.width * 0.5, dp(300))
+            pos_hint: {"center_x": 0.5}
+            text: "Close"
+            on_release: root.dismiss()
+
+                    
+
