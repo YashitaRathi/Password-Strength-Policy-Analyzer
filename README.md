@@ -54,7 +54,6 @@ Outputs:
 
 ---
 
-
 ## Tech Stack
 
 - Python 3
@@ -77,6 +76,17 @@ This project was developed to explore defensive security concepts related to:
 - Authentication risk detection
 - Policy enforcement evaluation
 - Preventing password-based attack vectors
+
+## Brute-Force Detection Simulation
+
+To extend the learning into authentication monitoring, a simple log-analysis
+script was created to detect repeated failed login attempts from the same IP.
+
+This demonstrates how security teams identify potential brute-force attacks
+by analyzing authentication logs.
+
+Run:
+python bruteforce_detector.py
    
 ## Author
 Yashita Rathi
